@@ -23,4 +23,29 @@ public class MeetingService {
 		return query.list();
 	}
 
+	public Meeting findByID(long id) {
+		return connector.getSession().get(Meeting.class, id);
+	}
+
+	public void add(Meeting meeting) {
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().save(meeting);
+		transaction.commit();
+	}
+
+	public void update(Meeting meeting) {
+		Transaction transaction = connector.getSession().getTransaction();
+		connector.getSession().save(meeting);
+		transaction.commit();
+	}
+
+	public void remove(Meeting meeting) {
+		Transaction transaction = connector.getSession().getTransaction();
+		connector.getSession().remove(meeting);
+		transaction.commit();
+	}
+
+//	public Collection<Meeting> getFilteredMeeting(String key, String sortBy, String sortOrder) {
+//
+//	}
 }
