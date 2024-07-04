@@ -34,13 +34,13 @@ public class MeetingService {
 	}
 
 	public void update(Meeting meeting) {
-		Transaction transaction = connector.getSession().getTransaction();
+		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().save(meeting);
 		transaction.commit();
 	}
 
 	public void remove(Meeting meeting) {
-		Transaction transaction = connector.getSession().getTransaction();
+		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().remove(meeting);
 		transaction.commit();
 	}
