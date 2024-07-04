@@ -1,10 +1,10 @@
 package com.company.enroller.persistence;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.company.enroller.model.Participant;
@@ -12,10 +12,12 @@ import com.company.enroller.model.Participant;
 @Component("participantService")
 public class ParticipantService {
 
+	private final PasswordEncoder passwordEncoder;
 	DatabaseConnector connector;
 
-	public ParticipantService() {
+	public ParticipantService(PasswordEncoder passwordEncoder) {
 		connector = DatabaseConnector.getInstance();
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	public Collection<Participant> getAll() {
@@ -30,6 +32,10 @@ public class ParticipantService {
 
 	public void add(Participant participant) {
 		Transaction transaction = connector.getSession().beginTransaction();
+
+		String hashedPassword = passwordEncoder.encode(participant.getPassword());
+		participant.setPassword(hashedPassword);
+
 		connector.getSession().save(participant);
 		transaction.commit();
 	}
